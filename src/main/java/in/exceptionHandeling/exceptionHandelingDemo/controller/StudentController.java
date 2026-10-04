@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,52 +22,88 @@ public class StudentController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<CreateStudentResponseDTO> create
+    public ResponseEntity<ApiSuccessResponseDTO<CreateStudentResponseDTO>> create
     (@Valid @RequestBody CreateStudentRequestDTO studentRequestDTO) {
 
-        CreateStudentResponseDTO studentResp =
+        CreateStudentResponseDTO studentResponseDTO =
                 studentService.createStudent(studentRequestDTO);
+
+        ApiSuccessResponseDTO<CreateStudentResponseDTO> response =
+                new ApiSuccessResponseDTO<>(
+                        LocalDateTime.now(),
+                        true,
+                        "Student created Successfully",
+                        studentResponseDTO
+                );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(studentResp);
+                .body(response);
     }
 
     // GET
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponseDTO> get(@PathVariable Long id) {
+    public ResponseEntity<ApiSuccessResponseDTO<StudentResponseDTO>> get
+    (@PathVariable Long id) {
+
         StudentResponseDTO studentResp = studentService.getStudent(id);
 
-        return ResponseEntity.ok(studentResp);
+        ApiSuccessResponseDTO<StudentResponseDTO> response =
+                new ApiSuccessResponseDTO<>(
+                        LocalDateTime.now(),
+                        true,
+                        "Student retrieved successfully",
+                        studentResp
+                );
+        return ResponseEntity.ok(response);
+
     }
 
     // GET ALL
     @GetMapping
-    public ResponseEntity<List<StudentResponseDTO>> getAll() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity<ApiSuccessResponseDTO<List<StudentResponseDTO>>> getAll() {
+        List<StudentResponseDTO> studentList = studentService.getAllStudents();
+
+        ApiSuccessResponseDTO<List<StudentResponseDTO>> response =
+                new ApiSuccessResponseDTO<>(
+                        LocalDateTime.now(),
+                        true,
+                        "Students retrieved successfully",
+                        studentList
+                );
+
+        return ResponseEntity.ok(response);
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudentResponseDTO> update
+    public ResponseEntity<ApiSuccessResponseDTO<UpdateStudentResponseDTO>> update
     (@PathVariable Long id, @Valid @RequestBody UpdateStudentRequestDTO studentRequestDTO) {
 
         UpdateStudentResponseDTO studentResp =
                 studentService.updateStudent(id, studentRequestDTO);
 
-        return ResponseEntity.ok(studentResp);
+        ApiSuccessResponseDTO<UpdateStudentResponseDTO> response =
+                new ApiSuccessResponseDTO<>(
+                        LocalDateTime.now(),
+                        true,
+                        "Student updated successfully",
+                        studentResp
+                );
+
+        return ResponseEntity.ok(response);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
 
     // SOFT DELETE
     @PatchMapping("/delete-soft/{id}")
-    public ResponseEntity<String> softDelete(@PathVariable Long id) {
+    public ResponseEntity<Void> softDelete(@PathVariable Long id) {
         studentService.deleteStudentSoftly(id);
         return ResponseEntity.noContent().build();
     }

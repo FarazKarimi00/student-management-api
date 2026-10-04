@@ -16,12 +16,14 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Handle ResourceNotFoundException
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ExceptionResponseDTO> handleResourceNotFoundException
             (ResourceNotFoundException ex, HttpServletRequest request) {
 
         ExceptionResponseDTO exceptionResp = new ExceptionResponseDTO(
                 LocalDateTime.now(),
+                false,
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage(),
@@ -33,12 +35,15 @@ public class GlobalExceptionHandler {
                 .body(exceptionResp);
     }
 
+
+    // Handle DuplicateResourceException
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ExceptionResponseDTO> duplicateResourceException
             (DuplicateResourceException ex, HttpServletRequest request) {
 
         ExceptionResponseDTO exceptionResp = new ExceptionResponseDTO(
                 LocalDateTime.now(),
+                false,
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage(),
@@ -50,6 +55,8 @@ public class GlobalExceptionHandler {
                 .body(exceptionResp);
     }
 
+
+    // Handle MethodArgumentNotValidException
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationExceptionResponseDTO> methodArgumentNotValidException
             (MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -63,6 +70,7 @@ public class GlobalExceptionHandler {
 
         ValidationExceptionResponseDTO exceptionResp = new ValidationExceptionResponseDTO(
                 LocalDateTime.now(),
+                false,
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Validation Failed",
@@ -75,15 +83,17 @@ public class GlobalExceptionHandler {
                 .body(exceptionResp);
     }
 
+    // Handle RuntimeException
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponseDTO> handleRuntimeException
             (RuntimeException ex, HttpServletRequest request) {
 
         ExceptionResponseDTO exceptionResp = new ExceptionResponseDTO(
                 LocalDateTime.now(),
+                false,
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ex.getMessage(),
+                "An unexpected server error occurred",
                 request.getRequestURI()
         );
 
@@ -92,15 +102,17 @@ public class GlobalExceptionHandler {
                 .body(exceptionResp);
     }
 
+    // Handle generic Exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponseDTO> handleException
             (Exception ex, HttpServletRequest request) {
 
         ExceptionResponseDTO exceptionResp = new ExceptionResponseDTO(
                 LocalDateTime.now(),
+                false,
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ex.getMessage(),
+                "Something went wrong. Please try again later",
                 request.getRequestURI()
 
         );

@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ValidationExceptionResponseDTO {
     private LocalDateTime timeStamp;
+    private boolean success;
     private int statusCode;
     private String error;
     private String message;
@@ -13,13 +14,14 @@ public class ValidationExceptionResponseDTO {
 
     public ValidationExceptionResponseDTO(
             LocalDateTime timeStamp,
+            boolean success,
             int statusCode,
             String error,
             String message,
             String path,
-            Map<String, String> fieldErrors
-    ) {
+            Map<String, String> fieldErrors) {
         this.timeStamp = timeStamp;
+        this.success = success;
         this.statusCode = statusCode;
         this.error = error;
         this.message = message;
@@ -33,6 +35,14 @@ public class ValidationExceptionResponseDTO {
 
     public void setTimeStamp(LocalDateTime timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public int getStatusCode() {

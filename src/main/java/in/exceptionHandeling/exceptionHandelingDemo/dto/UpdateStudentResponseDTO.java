@@ -9,7 +9,6 @@ public class UpdateStudentResponseDTO {
     private String email;
     private int rollNo;
     private String subject;
-    private String message;
     private LocalDateTime updatedAt;
 
     public Long getId() {
@@ -60,13 +59,6 @@ public class UpdateStudentResponseDTO {
         this.subject = subject;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;

@@ -9,7 +9,6 @@ public class CreateStudentResponseDTO {
     private String email;
     private int rollNo;
     private String subject;
-    private String message;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -61,13 +60,6 @@ public class CreateStudentResponseDTO {
         this.subject = subject;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

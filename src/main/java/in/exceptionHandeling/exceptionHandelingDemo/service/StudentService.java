@@ -24,11 +24,11 @@ public class StudentService {
     public CreateStudentResponseDTO createStudent
     (CreateStudentRequestDTO studentRequestDTO) {
 
-        Student student = mapCreateRequestDTOToEntity(studentRequestDTO);
+        Student student = mapToEntity(studentRequestDTO);
 
-        if(emailExists(student)) {
+        if(emailExists(student.getEmail())) {
             throw new DuplicateResourceException
-                    ("Student with email '" + student.getEmail() + "' already exists");
+                    ("Student with email " + student.getEmail() + " already exists");
         }
 
         Student studentResp = studentRepository.save(student);
@@ -107,11 +107,12 @@ public class StudentService {
 
 
         studentToDelete.setDeleted(true);
+        studentToDelete.setUpdatedAt(LocalDateTime.now());
         studentRepository.save(studentToDelete);
     }
 
     // Mapping methods
-    private Student mapCreateRequestDTOToEntity
+    private Student mapToEntity
     (CreateStudentRequestDTO studentRequestDTO) {
 
         Student student = new Student();
@@ -141,7 +142,6 @@ public class StudentService {
         responseDTO.setSubject(student.getSubject());
         responseDTO.setCreatedAt(student.getCreatedAt());
         responseDTO.setUpdatedAt(student.getUpdatedAt());
-        responseDTO.setMessage("Student created successfully");
         return responseDTO;
     }
 
@@ -170,12 +170,11 @@ public class StudentService {
         responseDTO.setRollNo(student.getRollNo());
         responseDTO.setSubject(student.getSubject());
         responseDTO.setUpdatedAt(student.getUpdatedAt());
-        responseDTO.setMessage("Student updated successfully");
         return responseDTO;
     }
 
     // Check methods
-    private boolean emailExists(Student student) {
-        return studentRepository.existsByEmail(student.getEmail());
+    private boolean emailExists(String email) {
+        return studentRepository.existsByEmail(email);
     }
 }
