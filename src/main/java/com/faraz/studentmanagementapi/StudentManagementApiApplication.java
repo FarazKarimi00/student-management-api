@@ -1,13 +1,13 @@
-package in.exceptionHandeling.exceptionHandelingDemo;
+package com.faraz.studentmanagementapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExceptionHandlingDemoApplication {
+public class StudentManagementApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ExceptionHandlingDemoApplication.class, args);
+		SpringApplication.run(StudentManagementApiApplication.class, args);
 	}
 
 }

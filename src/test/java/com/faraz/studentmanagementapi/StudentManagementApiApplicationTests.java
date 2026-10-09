@@ -1,10 +1,10 @@
-package in.exceptionHandeling.exceptionHandelingDemo;
+package com.faraz.studentmanagementapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExceptionHandelingDemoApplicationTests {
+class StudentManagementApiApplicationTests {
 
 	@Test
 	void contextLoads() {

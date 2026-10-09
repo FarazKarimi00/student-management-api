@@ -1,4 +1,4 @@
-package in.exceptionHandeling.exceptionHandelingDemo.entity;
+package com.faraz.studentmanagementapi.entity;
 
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package in.exceptionHandeling.exceptionHandelingDemo.dto;
+package com.faraz.studentmanagementapi.dto;
 
 import java.time.LocalDateTime;
 import java.util.Map;

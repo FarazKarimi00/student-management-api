@@ -8,11 +8,11 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>in.exceptionHandeling</groupId>
-	<artifactId>exceptionHandlingDemo</artifactId>
+	<groupId>com.faraz</groupId>
+	<artifactId>student-management-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>student-management-api</name>
+	<description>Student Management REST API built with Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>

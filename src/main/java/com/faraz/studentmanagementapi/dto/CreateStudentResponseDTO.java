@@ -1,8 +1,8 @@
-package in.exceptionHandeling.exceptionHandelingDemo.dto;
+package com.faraz.studentmanagementapi.dto;
 
 import java.time.LocalDateTime;
 
-public class StudentResponseDTO {
+public class CreateStudentResponseDTO {
     private Long id;
     private String name;
     private int age;
@@ -59,6 +59,7 @@ public class StudentResponseDTO {
     public void setSubject(String subject) {
         this.subject = subject;
     }
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

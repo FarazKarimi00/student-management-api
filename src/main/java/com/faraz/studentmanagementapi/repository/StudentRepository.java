@@ -1,6 +1,6 @@
-package in.exceptionHandeling.exceptionHandelingDemo.repository;
+package com.faraz.studentmanagementapi.repository;
 
-import in.exceptionHandeling.exceptionHandelingDemo.entity.Student;
+import com.faraz.studentmanagementapi.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

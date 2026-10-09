@@ -1,7 +1,7 @@
-package in.exceptionHandeling.exceptionHandelingDemo.controller;
+package com.faraz.studentmanagementapi.controller;
 
-import in.exceptionHandeling.exceptionHandelingDemo.dto.*;
-import in.exceptionHandeling.exceptionHandelingDemo.service.StudentService;
+import com.faraz.studentmanagementapi.dto.*;
+import com.faraz.studentmanagementapi.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

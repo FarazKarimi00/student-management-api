@@ -1,10 +1,10 @@
-package in.exceptionHandeling.exceptionHandelingDemo.service;
+package com.faraz.studentmanagementapi.service;
 
-import in.exceptionHandeling.exceptionHandelingDemo.dto.*;
-import in.exceptionHandeling.exceptionHandelingDemo.entity.Student;
-import in.exceptionHandeling.exceptionHandelingDemo.exception.DuplicateResourceException;
-import in.exceptionHandeling.exceptionHandelingDemo.exception.ResourceNotFoundException;
-import in.exceptionHandeling.exceptionHandelingDemo.repository.StudentRepository;
+import com.faraz.studentmanagementapi.dto.*;
+import com.faraz.studentmanagementapi.entity.Student;
+import com.faraz.studentmanagementapi.exception.DuplicateResourceException;
+import com.faraz.studentmanagementapi.exception.ResourceNotFoundException;
+import com.faraz.studentmanagementapi.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package in.exceptionHandeling.exceptionHandelingDemo.dto;
+package com.faraz.studentmanagementapi.dto;
 
 import jakarta.validation.constraints.*;
 

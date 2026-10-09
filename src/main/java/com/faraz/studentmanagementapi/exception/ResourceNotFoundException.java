@@ -1,4 +1,4 @@
-package in.exceptionHandeling.exceptionHandelingDemo.exception;
+package com.faraz.studentmanagementapi.exception;
 
 public class ResourceNotFoundException extends RuntimeException{
 
