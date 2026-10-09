@@ -2,7 +2,7 @@
 
 A Student Management REST API built using Spring Boot.
 
-I created this project while practicing CRUD operations, DTOs, validation, global exception handling, and structured API responses in Spring Boot.
+I created this project while practicing CRUD operations, DTOs, validation, global exception handling, and structured API responses, spring data JPA, and servlet filters
 
 ## Features
 
@@ -22,6 +22,10 @@ I created this project while practicing CRUD operations, DTOs, validation, globa
 - Unique email constraint
 - Proper HTTP status codes
 - MySQL database integration
+- Request logging using Servlet Filters
+- Request execution time logging
+- API key validation using `x-api-key`
+- Filter ordering using `@Order`
 
 ## API Endpoints
 
@@ -32,7 +36,48 @@ I created this project while practicing CRUD operations, DTOs, validation, globa
 | GET | `/api/students` | Get all students |
 | PUT | `/api/students/{id}` | Update student |
 | DELETE | `/api/students/{id}` | Hard delete student |
-| PATCH | `/api/students/soft-delete/{id}` | Soft delete student |
+| PATCH | `/api/students/delete-soft/{id}` | Soft delete student |
+
+## Filters
+
+This project uses Servlet Filters for request logging and API key validation.
+
+### Logging Filter
+
+The logging filter records:
+
+- HTTP method
+- Request URI
+- HTTP response status
+- Request processing time
+
+Example:
+
+```text
+Request: GET /api/students
+Response: 200 | Time: 35ms
+```
+
+### API Key Filter
+
+The API key filter checks the `x-api-key` request header.
+
+If the API key is missing or invalid, the request is stopped and the API returns:
+
+```json
+{
+  "success": false,
+  "message": "Invalid or missing api key"
+}
+```
+
+with HTTP status:
+
+```text
+401 Unauthorized
+```
+
+The filters are ordered using `@Order`.
 
 ## Technologies Used
 
@@ -43,6 +88,7 @@ I created this project while practicing CRUD operations, DTOs, validation, globa
 - MySQL
 - Maven
 - Postman
+- Jakarta Servlet API
 
 ## Exception Handling
 
@@ -103,3 +149,11 @@ While building this project, I practiced:
 - Soft delete
 - Spring Data JPA derived query methods
 - MySQL database integration
+- Servlet Filters
+- `FilterChain`
+- Filter ordering using `@Order`
+- Reading HTTP request headers
+- Request logging
+- Request execution time measurement
+- API key validation
+- Stopping or continuing requests using Filters
