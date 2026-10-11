@@ -2,7 +2,7 @@
 
 A Student Management REST API built using Spring Boot.
 
-I created this project while practicing CRUD operations, DTOs, validation, global exception handling, and structured API responses, spring data JPA, and servlet filters
+I created this project while practicing CRUD operations, DTOs, validation, global exception handling, structured API responses, Spring Data JPA, Servlet Filters, and Spring MVC Interceptors.
 
 ## Features
 
@@ -22,67 +22,31 @@ I created this project while practicing CRUD operations, DTOs, validation, globa
 - Unique email constraint
 - Proper HTTP status codes
 - MySQL database integration
-- Request logging using Servlet Filters
-- Request execution time logging
-- API key validation using `x-api-key`
-- Filter ordering using `@Order`
+- API key authentication using AuthenticationFilter
+- Role-based authorization using AuthorizationFilter
+- USER and ADMIN roles
+- Admin-only hard delete and soft delete
+- Filter ordering using @Order
+- Request logging using LoggingInterceptor
+- Request execution time measurement using PerformanceInterceptor
+- Spring MVC Interceptor registration using WebMvcConfigurer
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/students` | Create a student |
-| GET | `/api/students/{id}` | Get student by ID |
-| GET | `/api/students` | Get all students |
-| PUT | `/api/students/{id}` | Update student |
-| DELETE | `/api/students/{id}` | Hard delete student |
-| PATCH | `/api/students/delete-soft/{id}` | Soft delete student |
-
-## Filters
-
-This project uses Servlet Filters for request logging and API key validation.
-
-### Logging Filter
-
-The logging filter records:
-
-- HTTP method
-- Request URI
-- HTTP response status
-- Request processing time
-
-Example:
-
-```text
-Request: GET /api/students
-Response: 200 | Time: 35ms
-```
-
-### API Key Filter
-
-The API key filter checks the `x-api-key` request header.
-
-If the API key is missing or invalid, the request is stopped and the API returns:
-
-```json
-{
-  "success": false,
-  "message": "Invalid or missing api key"
-}
-```
-
-with HTTP status:
-
-```text
-401 Unauthorized
-```
-
-The filters are ordered using `@Order`.
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/api/students` | Create a student | USER, ADMIN |
+| GET | `/api/students/{id}` | Get student by ID | USER, ADMIN |
+| GET | `/api/students` | Get all students | USER, ADMIN |
+| PUT | `/api/students/{id}` | Update student | USER, ADMIN |
+| DELETE | `/api/students/{id}` | Hard delete student | ADMIN only |
+| PATCH | `/api/students/delete-soft/{id}` | Soft delete student | ADMIN only |
 
 ## Technologies Used
 
 - Java
 - Spring Boot
+- Spring MVC
 - Spring Data JPA
 - Hibernate
 - MySQL
@@ -110,6 +74,122 @@ Error responses are returned in a structured JSON format with details such as:
 - Error
 - Message
 - Request path
+
+
+## Filters
+
+This project uses Servlet Filters for API key authentication and role-based authorization.
+
+### AuthenticationFilter
+
+The authentication filter checks the `x-api-key` request header and assigns a role based on the validated API key.
+
+For local testing:
+
+| API Key | Role |
+|---|---|
+| `user-12345` | USER |
+| `admin-67890` | ADMIN |
+
+These API keys are for demonstration purposes only.
+
+The authenticated role is stored using:
+
+`request.setAttribute("authenticatedRole", role)`
+
+If the API key is missing or invalid, the request is stopped and the API returns:
+
+```json
+{
+  "success": false,
+  "message": "Invalid or missing api key"
+}
+```
+
+HTTP Status: `401 Unauthorized`
+
+### AuthorizationFilter
+
+The authorization filter retrieves the authenticated role using `request.getAttribute()`.
+
+- USER can create, retrieve, and update students.
+- ADMIN can perform all operations.
+- Only ADMIN can hard delete or soft delete students.
+
+If a USER attempts a delete operation, the API returns:
+
+```json
+{
+  "success": false,
+  "message": "Access denied. ADMIN role required."
+}
+```
+
+HTTP Status: `403 Forbidden`
+
+Both Filters are ordered using `@Order`:
+
+1. `AuthenticationFilter` — `@Order(1)`
+2. `AuthorizationFilter` — `@Order(2)`
+
+
+
+## Spring MVC Interceptors
+
+This project uses Spring MVC Interceptors for request logging and performance monitoring.
+
+Both Interceptors implement `HandlerInterceptor` and are registered using `WebMvcConfigurer` in `WebConfig`.
+
+### LoggingInterceptor
+
+The logging interceptor records:
+
+- HTTP method
+- Request URI
+- Client IP address
+- Authenticated user role
+- Controller class name
+- Controller method name
+- HTTP response status
+- Unresolved exception details, if available
+
+It uses `preHandle()` to log incoming requests and `afterCompletion()` to log response status and exception details.
+
+### PerformanceInterceptor
+
+The performance interceptor measures request execution time using `System.nanoTime()`.
+
+- `preHandle()` records the starting time.
+- `afterCompletion()` calculates the elapsed time.
+- Execution time is displayed in milliseconds.
+
+### Interceptor Ordering
+
+Both Interceptors are registered in `WebConfig` with the following order:
+
+1. `LoggingInterceptor` — order 1
+2. `PerformanceInterceptor` — order 2
+
+Both are configured for `/api/**` endpoints.
+
+The `preHandle()` methods execute in registration order, while `afterCompletion()` executes in reverse order.
+
+Example console output:
+
+```text
+-------- Incoming request --------
+HTTP method: GET
+Request URI: /api/students/10
+Client IP: 0:0:0:0:0:0:0:1
+Authenticated role: USER
+Controller: com.faraz.studentmanagementapi.controller.StudentController
+Method: get
+Request execution time: 15.42ms
+Response status: 200
+```
+
+Requests rejected by the authentication or authorization Filters do not reach these Interceptors.
+
 
 ## Success Responses
 
@@ -153,7 +233,15 @@ While building this project, I practiced:
 - `FilterChain`
 - Filter ordering using `@Order`
 - Reading HTTP request headers
-- Request logging
-- Request execution time measurement
-- API key validation
+- API key authentication
+- Role-based authorization
+- HTTP status codes `401 Unauthorized` and `403 Forbidden`
+- Sharing data between Filters and Interceptors using request attributes
 - Stopping or continuing requests using Filters
+- Spring MVC `HandlerInterceptor`
+- `preHandle()` and `afterCompletion()`
+- Identifying controller methods using `HandlerMethod`
+- Request logging using Interceptors
+- Request execution time measurement using `System.nanoTime()`
+- Registering Interceptors using `WebMvcConfigurer`
+- Interceptor ordering and path patterns

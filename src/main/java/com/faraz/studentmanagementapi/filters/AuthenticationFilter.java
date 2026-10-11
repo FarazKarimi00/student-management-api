@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@Order(2)
-public class ApiKeyFilter implements Filter {
+@Order(1)
+public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse,
@@ -20,7 +20,14 @@ public class ApiKeyFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
         String apiKey = httpRequest.getHeader("x-api-key");
-        if(!"12345".equals(apiKey)) {
+
+        String role;
+
+        if("user-12345".equals(apiKey)) {
+            role = "USER";
+        } else if ("admin-67890".equals(apiKey)) {
+            role = "ADMIN";
+        } else {
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpResponse.setContentType("application/json");
             httpResponse.getWriter().write(
@@ -31,6 +38,7 @@ public class ApiKeyFilter implements Filter {
             );
             return;
         }
+        httpRequest.setAttribute("authenticatedRole",role);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
