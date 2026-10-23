@@ -30,6 +30,7 @@ I created this project while practicing CRUD operations, DTOs, validation, globa
 - Request logging using LoggingInterceptor
 - Request execution time measurement using PerformanceInterceptor
 - Spring MVC Interceptor registration using WebMvcConfigurer
+- Spring AOP and custom annotation
 
 ## API Endpoints
 
@@ -210,6 +211,40 @@ Example:
 }
 ```
 
+## Spring AOP
+
+This project uses Spring AOP to measure the execution time of selected service methods through a custom annotation.
+
+### `@TrackExecutionTime`
+
+A custom annotation is used to mark service methods whose execution time should be measured.
+
+The annotation supports:
+
+- `operation`: A descriptive name for the operation.
+- `warnAfter`: The execution-time threshold in milliseconds for logging a slow-operation warning.
+
+### `ExecutionTimeAspect`
+
+The aspect uses `@Around` advice with `ProceedingJoinPoint` to:
+
+- Execute the original service method using `proceed()`.
+- Measure execution time using `System.nanoTime()`.
+- Display the elapsed time in milliseconds.
+- Display a slow-operation warning when the configured threshold is reached.
+- Preserve the original return value and allow exceptions to propagate.
+
+The annotation is applied to the following service operations:
+
+- Create student
+- Get student by ID
+- Get all students
+- Update student
+- Soft delete student
+- Hard delete student
+
+This keeps execution-time measurement separate from the business logic in the service layer.
+
 ## What I Practiced
 
 While building this project, I practiced:
@@ -245,3 +280,10 @@ While building this project, I practiced:
 - Request execution time measurement using `System.nanoTime()`
 - Registering Interceptors using `WebMvcConfigurer`
 - Interceptor ordering and path patterns
+- Spring AOP
+- Custom annotations using `@Target` and `@Retention`
+- `@Around` advice
+- `ProceedingJoinPoint` and `proceed()`
+- Service method execution-time measurement using `System.nanoTime()`
+- Configurable slow-operation warning thresholds
+- Preserving method return values and exception propagation in AOP advice

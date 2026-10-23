@@ -1,5 +1,6 @@
 package com.faraz.studentmanagementapi.service;
 
+import com.faraz.studentmanagementapi.aop.annotation.TrackExecutionTime;
 import com.faraz.studentmanagementapi.dto.*;
 import com.faraz.studentmanagementapi.entity.Student;
 import com.faraz.studentmanagementapi.exception.DuplicateResourceException;
@@ -21,6 +22,7 @@ public class StudentService {
     }
 
     // CREATE
+    @TrackExecutionTime(operation = "CREATE_STUDENT")
     public CreateStudentResponseDTO createStudent
     (CreateStudentRequestDTO studentRequestDTO) {
 
@@ -36,6 +38,7 @@ public class StudentService {
     }
 
     // GET
+    @TrackExecutionTime(operation = "GET_STUDENT")
     public StudentResponseDTO getStudent(Long id) {
 //        Optional<Student> studentResp = studentRepository.findByIdAndDeletedIsFalse(id);
 
@@ -60,6 +63,7 @@ public class StudentService {
     }
 
     // GET ALL
+    @TrackExecutionTime(operation = "GET_ALL_STUDENTS")
     public List<StudentResponseDTO> getAllStudents() {
         List<Student> studentList = studentRepository.findByDeletedIsFalse();
         return studentList.stream()
@@ -68,6 +72,7 @@ public class StudentService {
     }
 
     // UPDATE
+    @TrackExecutionTime(operation = "UPDATE_STUDENT")
     public UpdateStudentResponseDTO updateStudent
     (Long id, UpdateStudentRequestDTO studentRequestDTO) {
 
@@ -88,6 +93,7 @@ public class StudentService {
     }
 
     // DELETE
+    @TrackExecutionTime(operation = "DELETE_STUDENT")
     public void deleteStudent(Long id) {
 
         Student studentToDelete = studentRepository.findById(id)
@@ -98,12 +104,12 @@ public class StudentService {
     }
 
     // SOFT DELETE
+    @TrackExecutionTime(operation = "SOFT_DELETE_STUDENT")
     public void deleteStudentSoftly(Long id) {
         Student studentToDelete = studentRepository
                 .findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException
                         ("Student with id " + id + " not found"));
-
 
 
         studentToDelete.setDeleted(true);
